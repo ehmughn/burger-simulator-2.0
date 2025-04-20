@@ -1,0 +1,2 @@
+MENU = 0
+ADVENTURE = 1

@@ -1,5 +1,5 @@
 import pygame
-from window_values import *
+from staticvalues.window_values import *
 from button import *
 
 GAP = 12
@@ -25,12 +25,12 @@ class Ingredient(Button):
         width_change = (self.index % 6) // 2
         height_change = self.index % 2 == 1
 
-        self.tile_x = 160 + (width_change * (INGREDIENTS_TILE_WIDTH + TILE_WIDTH_GAP)) 
+        self.tile_x = 190 + (width_change * (INGREDIENTS_TILE_WIDTH + TILE_WIDTH_GAP)) 
         self.tile_y = HEIGHT - 75 - (INGREDIENTS_TILE_HEIGHT * 2) + (height_change * (INGREDIENTS_TILE_HEIGHT + TILE_HEIGHT_GAP))
         self.tile_width = INGREDIENTS_TILE_WIDTH
         self.tile_height = INGREDIENTS_TILE_HEIGHT
 
-        super().__init__(self.name, self.tile_x + 4, self.tile_y + 30, self.tile_width, self.tile_height + 10, self.purpose)
+        super().__init__(self.name, self.tile_x + 4, self.tile_y + 15, self.tile_width, self.tile_height + 10, self.purpose)
 
         Ingredient.index += 1
 
