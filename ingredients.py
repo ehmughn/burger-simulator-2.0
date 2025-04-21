@@ -17,7 +17,7 @@ class Ingredient(Button):
         self.height = 64
         self.center_x = (WIDTH - self.width) // 2
         self.center_y = ((HEIGHT - self.height) // 2) - 128
-        self.purpose = Button.PURPOSE_INGREDIENT
+        self.purpose = Button.PURPOSE_PLAYING_INGREDIENT
 
         if uncounted:
             return
@@ -35,9 +35,10 @@ class Ingredient(Button):
         Ingredient.index += 1
 
 
-    def load_image(self):
+    def load_image(self, width=None, height=None) -> pygame.Surface:
+        # Load the image from the specified path and scale it to the specified width and height
         image = pygame.image.load("res/ingredients/" + self.image_path + ".png")
-        return pygame.transform.scale(image, (self.width, self.height))
+        return pygame.transform.scale(image, (width if width is not None else self.width, height if height is not None else self.height))
 
 
 # Create instances of Ingredient for each ingredient

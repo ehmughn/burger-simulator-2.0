@@ -1,6 +1,5 @@
 from ingredients import *
 from button import *
-from main import BIG_FONT
 from staticvalues.window_values import *
 from staticvalues.colors import Color
 
@@ -74,10 +73,10 @@ def playing_mouse_pressed(mouse_x: int, mouse_y: int) -> None:
             continue
         
         match button.purpose:
-            case Button.PURPOSE_INGREDIENT:
+            case Button.PURPOSE_PLAYING_INGREDIENT:
                 put_ingredients(button)
                 break
-            case Button.PURPOSE_MOVE_INGREDIENT:
+            case Button.PURPOSE_PLAYING_MOVE_INGREDIENT:
                 ingredient_navigation(button.name)
                 break
             case Button.PURPOSE_DEFAULT:
@@ -86,8 +85,8 @@ def playing_mouse_pressed(mouse_x: int, mouse_y: int) -> None:
 
 def draw_ingredients_list(window) -> None:
     # Draw the ingredients list on the screen
-    for x in range(len(INGREDIENTS_LIST[0 + (ingredients_current_page * 6):6 + (ingredients_current_page * 6)])):
-        ingredient = INGREDIENTS_LIST[x + (ingredients_current_page * 6)]
+    for index in range(len(INGREDIENTS_LIST[0 + (ingredients_current_page * 6):6 + (ingredients_current_page * 6)])):
+        ingredient = INGREDIENTS_LIST[index + (ingredients_current_page * 6)]
 
         window.blit(TILE, (ingredient.tile_x, ingredient.tile_y))
         window.blit(ingredient.load_image(), (ingredient.tile_x, ingredient.tile_y + 15))
@@ -100,9 +99,10 @@ def draw_placed_ingredients(window) -> None:
 
 
 def draw_navigation_arrows(window) -> None:
+    BIG_FONT = pygame.font.Font("res/fonts/VAG Rounded Std Bold.otf", 72)
     # Draw the navigation arrows on the screen
     for button in Button.buttons:
-        if button.purpose == Button.PURPOSE_MOVE_INGREDIENT and button.shown:
+        if button.purpose == Button.PURPOSE_PLAYING_MOVE_INGREDIENT and button.shown:
             arrow_text, arrow_rect = button.draw(window, color=Color.GREEN, font=BIG_FONT, border_radius=20)
             window.blit(arrow_text, arrow_rect)
 

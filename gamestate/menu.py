@@ -18,26 +18,54 @@ def menu_mouse_pressed(mouse_x: int, mouse_y: int) -> None:
             continue
         if not button.shown:
             continue
-        if button.purpose == Button.PURPOSE_CHANGE_GAME_STATE:
+        if button.name == "Start":
             Values.current_game_state = Gamestate.ADVENTURE
-            print(Values.current_game_state)
-    print(Values.current_game_state)
+            Values.browsed_game_state.append(Gamestate.ADVENTURE)
+        if button.name == "Recipe Book":
+            Values.current_game_state = Gamestate.RECIPE
+            Values.browsed_game_state.append(Gamestate.RECIPE)
     print("You pressed the mouse in the menu!")
+
+
+def draw_game_state_buttons(window, button) -> None:
+    color = Color.RED
+    font = pygame.font.Font("res/fonts/VAG Rounded Std Bold.otf", 36)
+    
+    if button.name == "Start":
+        color = Color.MAGENTA
+        font = pygame.font.Font("res/fonts/VAG Rounded Std Bold.otf", 60)
+    elif button.name == "Recipe Book":
+        color = Color.CHOCOLATE
+        font = pygame.font.Font("res/fonts/VAG Rounded Std Bold.otf", 54)
+
+    arrow_text, arrow_rect = button.draw(window, color=color, font=font, border_radius=20)
+    window.blit(arrow_text, arrow_rect)
+
+
+def draw_buttons(window) -> None:
+
+    allowed_buttons = [Button.PURPOSE_MENU_CHANGE_GAME_STATE]
+
+    for button in Button.buttons:
+        if button.purpose not in allowed_buttons:
+            continue
+        if not button.shown:
+            continue
+        if button.purpose == Button.PURPOSE_MENU_CHANGE_GAME_STATE:
+            draw_game_state_buttons(window, button)
 
 
 def draw_menu(window) -> None:
     # This function draws the menu on the screen
-    window.fill((0,0,0))
+    window.fill(BACKGROUND_COLOR)
 
-    BIG_FONT = pygame.font.Font("res/fonts/VAG Rounded Std Bold.otf", 72)
-
-    title = BIG_FONT.render("Play Tic-Tac-Toe", True, (255,255,255))
+    TITLE_FONT = pygame.font.Font("res/fonts/VAG Rounded Std Bold.otf", 72)
+    title = TITLE_FONT.render("Burger Simulator", True, (0,0,0))
     titleRect = title.get_rect()
     titleRect.center = ((WIDTH // 2), 150)
     window.blit(title, titleRect)
-    
-    start_button = Button("Start", (WIDTH//2) - (250//2), 220, 250, 100, Button.PURPOSE_CHANGE_GAME_STATE, shown=True)
-    arrow_text, arrow_rect = start_button.draw(window, color=Color.MAGENTA, font=BIG_FONT, border_radius=20)
-    window.blit(arrow_text, arrow_rect)
+
+    # Draw the buttons on the screen
+    draw_buttons(window)
 
     pygame.display.update()

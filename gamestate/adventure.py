@@ -1,4 +1,4 @@
-from functionalities.playing import *
+from functionalities.playing import playing_key_pressed, playing_mouse_pressed, draw_playing
 
 
 def adventure_key_pressed(key) -> None:

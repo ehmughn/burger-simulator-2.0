@@ -2,13 +2,12 @@ import pygame
 from ingredients import *
 from button import *
 from staticvalues.window_values import *
-from staticvalues import gamestate as Gamestate
-from gamestate.menu import *
-from gamestate.adventure import *
-from functionalities.playing import *
 from globalvalues import *
 
-game_running = True
+from staticvalues import gamestate as Gamestate
+from gamestate.menu import draw_menu, menu_key_pressed, menu_mouse_pressed
+from gamestate.adventure import draw_adventure, adventure_key_pressed, adventure_mouse_pressed
+from gamestate.recipe import draw_recipe, recipe_key_pressed, recipe_mouse_pressed
 
 # Initialize Pygame and create a window
 pygame.init()
@@ -27,7 +26,10 @@ def map_mouse_press(mouse_x, mouse_y) -> None:
         case Gamestate.MENU:
             menu_mouse_pressed(mouse_x, mouse_y)
         case Gamestate.ADVENTURE:
-            playing_mouse_pressed(mouse_x, mouse_y)
+            adventure_mouse_pressed(mouse_x, mouse_y)
+        case Gamestate.RECIPE:
+            recipe_mouse_pressed(mouse_x, mouse_y)
+
 
 
 def map_key_press(key) -> None:
@@ -35,16 +37,18 @@ def map_key_press(key) -> None:
     # It maps the key press to the current game state
     # and calls the appropriate function
     # It also handles the ESC key to exit the game and debugging features
-    global game_running
     
     if key == pygame.K_ESCAPE:
-        game_running = False
+        Values.game_running = False
         return
     elif key == pygame.K_1:
         Values.current_game_state = Gamestate.MENU
         return
     elif key == pygame.K_2:
         Values.current_game_state = Gamestate.ADVENTURE
+        return
+    elif key == pygame.K_3:
+        Values.current_game_state = Gamestate.RECIPE
         return
     elif key == pygame.K_d:
         print("Debugging key pressed")
@@ -55,19 +59,20 @@ def map_key_press(key) -> None:
             menu_key_pressed(key)
         case Gamestate.ADVENTURE:
             adventure_key_pressed(key)
+        case Gamestate.RECIPE:
+            recipe_key_pressed(key)
 
 
 def main() -> None:
     # Initialize the game state and ingredients
-    global game_running
     clock = pygame.time.Clock()
 
     # Main game loop
-    while game_running:
+    while Values.game_running:
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game_running = False
+                Values.game_running = False
             elif event.type == pygame.KEYDOWN:
                 map_key_press(event.key)
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -80,6 +85,8 @@ def main() -> None:
                 draw_menu(window)
             case Gamestate.ADVENTURE:
                 draw_adventure(window)
+            case Gamestate.RECIPE:
+                draw_recipe(window)
 
     pygame.quit()
     print("Game closed")

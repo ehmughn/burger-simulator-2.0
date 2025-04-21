@@ -1,2 +1,3 @@
 MENU = 0
 ADVENTURE = 1
+RECIPE = 2
