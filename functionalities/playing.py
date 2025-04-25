@@ -12,11 +12,18 @@ ingredients_current_page = 0
 def put_ingredients(ingredient: Ingredient) -> None:
     # This function is called when an ingredient is placed on the burger
     global ingredients_placed, next_bun_is_top
+
+    # Only allows 20 ingredients to be placed
+    if not ingredients_placed < Ingredient.PLACE_LIMIT:
+        return
+
     ingredients_placed += 1
 
     if ingredient.name != "Burger Buns":
+        # Only calls if the ingredient is not a bun
         placed_ingredients.append(ingredient)
         return
+    
     if next_bun_is_top:
         placed_ingredients.append(burger_buns_top)
     else:
@@ -41,7 +48,7 @@ def delete_top_ingredient() -> None:
 def ingredient_navigation(movement: str) -> None:
     # This function is called when the user navigates through the ingredients list
     global ingredients_current_page
-    ingredients_size = (len(INGREDIENTS_LIST)-1) // 6
+    ingredients_size = (len(owned_ingredients)-1) // 6
     if movement == ">":
         if ingredients_current_page < ingredients_size:
             ingredients_current_page += 1
@@ -52,8 +59,8 @@ def ingredient_navigation(movement: str) -> None:
             ingredients_current_page -= 1
         else:
             ingredients_current_page = ingredients_size
-    for index in range(len(INGREDIENTS_LIST)):
-        ingredient = INGREDIENTS_LIST[index]
+    for index in range(len(owned_ingredients)):
+        ingredient = owned_ingredients[index]
         ingredient.shown =  0 + (ingredients_current_page * 6) <= index < 6 + (ingredients_current_page * 6)
 
 
@@ -85,17 +92,17 @@ def playing_mouse_pressed(mouse_x: int, mouse_y: int) -> None:
 
 def draw_ingredients_list(window) -> None:
     # Draw the ingredients list on the screen
-    for index in range(len(INGREDIENTS_LIST[0 + (ingredients_current_page * 6):6 + (ingredients_current_page * 6)])):
-        ingredient = INGREDIENTS_LIST[index + (ingredients_current_page * 6)]
+    for index in range(len(owned_ingredients[0 + (ingredients_current_page * 6):6 + (ingredients_current_page * 6)])):
+        ingredient = owned_ingredients[index + (ingredients_current_page * 6)]
 
         window.blit(TILE, (ingredient.tile_x, ingredient.tile_y))
-        window.blit(ingredient.load_image(), (ingredient.tile_x, ingredient.tile_y + 15))
+        window.blit(ingredient.transform_image(128, 64), (ingredient.tile_x, ingredient.tile_y + 15))
 
 
 def draw_placed_ingredients(window) -> None:
     # Draw the placed ingredients on the screen
     for index, ingredient in enumerate(placed_ingredients):
-        window.blit(ingredient.load_image(), (ingredient.center_x, ingredient.center_y - (GAP * index) + (ingredient.center_y)))
+        window.blit(ingredient.transform_image(128, 64), (ingredient.center_x, ingredient.center_y - (GAP * index) + (ingredient.center_y)))
 
 
 def draw_navigation_arrows(window) -> None:

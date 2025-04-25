@@ -31,7 +31,6 @@ def map_mouse_press(mouse_x, mouse_y) -> None:
             recipe_mouse_pressed(mouse_x, mouse_y)
 
 
-
 def map_key_press(key) -> None:
     # This function is called when a key is pressed globally
     # It maps the key press to the current game state

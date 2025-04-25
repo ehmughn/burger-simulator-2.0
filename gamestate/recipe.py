@@ -48,7 +48,7 @@ def draw_burger(window, burger, is_left) -> None:
     gap = 0
     left_or_right = 0 if is_left else 1
     for index, ingredient in enumerate(burger):
-        window.blit(ingredient.load_image(), (140 + (400 * left_or_right), ingredient.center_y - (GAP * index) + (ingredient.center_y)))
+        window.blit(ingredient.transform_image(128,64), (140 + (400 * left_or_right), ingredient.center_y - (GAP * index) + (ingredient.center_y)))
 
 
 def draw_burgers(window) -> None:

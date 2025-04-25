@@ -1,27 +1,35 @@
 import pygame
 from staticvalues.window_values import *
 from button import *
+from display_adjustments.image import Image
 
 GAP = 12
 
 
-class Ingredient(Button):
+class Ingredient(Button, Image):
 
+    # Global values about ingredients
+    PLACE_LIMIT = 20
     index = 0
 
-
     def __init__(self, name: str, image_path: str, uncounted=False, shown=False) -> None:
+        
+        # Initialize the ingredients attributes
         self.name = name
         self.image_path = image_path
         self.width = 128
         self.height = 64
+        self.image = pygame.image.load("res/ingredients/" + self.image_path + ".png")
+        self.rect = self.image.get_rect(center=(self.width,self.height))
         self.center_x = (WIDTH - self.width) // 2
         self.center_y = ((HEIGHT - self.height) // 2) - 128
         self.purpose = Button.PURPOSE_PLAYING_INGREDIENT
 
+        # Filters out which ingredients is actually displayed in the selectable ingredients
         if uncounted:
             return
         
+        # Width and height measurements in the selectable ingredients
         width_change = (self.index % 6) // 2
         height_change = self.index % 2 == 1
 
@@ -30,15 +38,17 @@ class Ingredient(Button):
         self.tile_width = INGREDIENTS_TILE_WIDTH
         self.tile_height = INGREDIENTS_TILE_HEIGHT
 
-        super().__init__(self.name, self.tile_x + 4, self.tile_y + 15, self.tile_width, self.tile_height + 10, self.purpose)
+        # calls the parent button class to make the ingredient a button
+        # super().__init__(self.name, self.tile_x + 4, self.tile_y + 15, self.tile_width, self.tile_height + 10, self.purpose)
+
+        self.name = name
+        self.x = self.tile_x + 4
+        self.y = self.tile_y + 15
+        self.height = self.height + 10
+        self.shown = False
+        Button.buttons.append(self)
 
         Ingredient.index += 1
-
-
-    def load_image(self, width=None, height=None) -> pygame.Surface:
-        # Load the image from the specified path and scale it to the specified width and height
-        image = pygame.image.load("res/ingredients/" + self.image_path + ".png")
-        return pygame.transform.scale(image, (width if width is not None else self.width, height if height is not None else self.height))
 
 
 # Create instances of Ingredient for each ingredient
@@ -51,12 +61,14 @@ egg = Ingredient("Egg", "egg")
 ketchup = Ingredient("Ketchup", "ketchup")
 lettuce = Ingredient("Lettuce", "lettuce")
 mango = Ingredient("Mango", "mango")
+mustard = Ingredient("Mustard", "mustard")
 mayonnaise = Ingredient("Mayonnaise", "mayonnaise")
 onion = Ingredient("Onion", "onions")
 patty = Ingredient("Patty", "patty")
 pickle = Ingredient("Pickle", "pickles")
 tomato = Ingredient("Tomato", "tomato")
 
+# List out the whole list of ingredients
 INGREDIENTS_LIST = [
     bacon,
     burger_buns,
@@ -65,9 +77,17 @@ INGREDIENTS_LIST = [
     ketchup,
     lettuce,
     mango,
+    mustard,
     mayonnaise,
     onion,
     patty,
     pickle,
     tomato
 ]
+
+# This list shows what the user is currently owned
+owned_ingredients: list[Ingredient] = []
+
+# Temporarily sets the owned ingredients to INGREDIENTS_LIST (whole list of ingredients)
+# for debugging purposes
+owned_ingredients = INGREDIENTS_LIST

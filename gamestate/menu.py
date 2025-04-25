@@ -4,6 +4,7 @@ from staticvalues.colors import Color
 from staticvalues import gamestate as Gamestate
 from button import Button
 from globalvalues import *
+from display_adjustments.image import Image
 
 
 def menu_key_pressed(key) -> None:
@@ -57,7 +58,9 @@ def draw_buttons(window) -> None:
 
 def draw_menu(window) -> None:
     # This function draws the menu on the screen
-    window.fill(BACKGROUND_COLOR)
+    background = Image("res/background.png").transform_image(WIDTH, HEIGHT)
+    window.blit(background,(0,0))
+    # window.fill(BACKGROUND_COLOR)
 
     TITLE_FONT = pygame.font.Font("res/fonts/VAG Rounded Std Bold.otf", 72)
     title = TITLE_FONT.render("Burger Simulator", True, (0,0,0))
